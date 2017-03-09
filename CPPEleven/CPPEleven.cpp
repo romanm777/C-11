@@ -155,16 +155,22 @@ void unordered_map_test( )
 	//	unordered_map::equal_range
 	std::pair< StrSRvMap::iterator, StrSRvMap::iterator > range = my_map.equal_range( "key 20" );
 
-	//	unordered_map::erase
-	//	unordered_map::find
-	//	unordered_map::get_allocator
 	//	unordered_map::hash_function
-	//	unordered_map::insert
-	//	unordered_map::key_eq
+	StrSRvMap::hasher fn = my_map.hash_function( );
+	std::cout << "this " << fn( "this" ) << std::endl;
+	std::cout << "bla-bla " << fn( "bla-bla" ) << std::endl;
+
 	//	unordered_map::load_factor
 	//	unordered_map::max_bucket_count
 	//	unordered_map::max_load_factor
 	//	unordered_map::max_size
+	std::cout << "size = " << my_map.size( ) << std::endl;
+	std::cout << "max_size = " << my_map.max_size( ) << std::endl;
+	std::cout << "bucket_count = " << my_map.bucket_count( ) << std::endl;
+	std::cout << "max_bucket_count = " << my_map.max_bucket_count( ) << std::endl;
+	std::cout << "load_factor = " << my_map.load_factor( ) << std::endl;
+	std::cout << "max_load_factor = " << my_map.max_load_factor( ) << std::endl;
+
 	//	unordered_map::operator=
 	//	unordered_map::operator[]
 	//	unordered_map::rehash
