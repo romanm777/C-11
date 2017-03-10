@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
+#include <deque>
 
 const int Count = 1000;
 

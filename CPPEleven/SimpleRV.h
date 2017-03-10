@@ -11,6 +11,8 @@ public:
 	SimpleRV( SimpleRV&& rvt );
 	SimpleRV& operator=( SimpleRV&& rvt );
 
+	~SimpleRV( );
+
 	std::vector<std::string> m_names;
 };
 

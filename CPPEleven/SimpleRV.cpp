@@ -41,3 +41,7 @@ SimpleRV& SimpleRV::operator=( SimpleRV&& rvt )
 
 	return *this;
 }
+
+SimpleRV::~SimpleRV( )
+{
+}

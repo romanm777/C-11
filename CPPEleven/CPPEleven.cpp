@@ -47,6 +47,8 @@ void uref_test( );
 void uref_test2( );
 void lambda_test( );
 void unordered_map_test( );
+void vector_test( );
+void list_test( );
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -84,9 +86,71 @@ int _tmain(int argc, _TCHAR* argv[])
 	//uref_test( );
 	//uref_test2( );
 	//lambda_test( );
-	unordered_map_test( );
+	//unordered_map_test( );
+	//vector_test( );
+	list_test( );
 
 	return 0;
+}
+
+using SimpleList = std::list<SimpleRV>;
+
+void list_test( )
+{
+	std::cout << std::endl << "=================== Vector test =========================" << std::endl;
+
+	const int list_size = 500;
+	SimpleList list;
+	
+	// resize( )
+
+	std::cout << "List size: " << list.size( ) << std::endl;
+	list.resize( list_size );
+	std::cout << "List size after resize( ): " << list.size( ) << std::endl;
+}
+
+typedef std::vector<SimpleRV> SimpleRvs;
+
+void vector_test( )
+{
+	std::cout << std::endl << "=================== Vector test =========================" << std::endl;
+	
+	const int val_count = 1000;
+	SimpleRvs values;
+
+	// capcity( )
+	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
+
+	// reserve( )
+	values.reserve( val_count / 2 );
+
+	// capcity( )
+	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
+
+	// fill
+	__int64 start = get_time( );
+	for ( int i = 0; i < val_count; ++i ) {
+		values.push_back( SimpleRV( "vec key" + std::to_string( i ) ) );
+	}
+	__int64 end = get_time( );
+
+	std::cout << val_count << " elements was appended for " << end - start << " seconds." << std::endl;
+
+	// capcity( )
+	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
+
+	// second fill
+	start = get_time( );
+	for ( int i = 0; i < val_count / 2; ++i ) {
+		values.push_back( SimpleRV( "other vec key" + std::to_string( i ) ) );
+	}
+	end = get_time( );
+
+	std::cout << val_count / 2 << " additional elements was appended for " << end - start << " seconds." << std::endl;
+
+	// capcity( )
+	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
+
 }
 
 using StrSRvMap = std::unordered_map<std::string, SimpleRV>;
@@ -94,9 +158,19 @@ using StrSRvPair = std::pair<std::string, SimpleRV>;
 
 void unordered_map_test( )
 {
+	std::cout << std::endl << "=================== Unordered_map test =========================" << std::endl;
+
+	const int count = 508;//100;
 	StrSRvMap my_map;
 
-	const int count = 100;
+	// bucket count
+	int bucket_count = my_map.bucket_count( );
+	std::cout << "bucket_count( ): " << bucket_count << std::endl;
+
+	// reserve
+	std::cout << "reserve()" << std::endl;
+	my_map.reserve( count + 2 );
+
 	for ( int i = 0; i < count; ++i ) {
 		StrSRvPair pair = StrSRvPair( "key " + std::to_string( i ) , SimpleRV( "item " + std::to_string( i ) ) );
 		my_map.insert( pair );
@@ -119,14 +193,15 @@ void unordered_map_test( )
 	std::vector< int > buckets;
 	for ( int i = 0; i < count / 10; ++i )
 	{
-		int bucket = my_map.bucket( "key " + std::to_string( i ) );
-		std::cout << bucket << std::endl;
+		std::string key( "key " + std::to_string( i ) );
+		int bucket = my_map.bucket( key );
+		std::cout << "\"" << key << "\" is in bucket " << bucket << std::endl;
 
 		buckets.push_back( bucket );
 	}
 	
 	// bucket_cout
-	int bucket_count = my_map.bucket_count( );
+	bucket_count = my_map.bucket_count( );
 	std::cout << "bucket_count( ): " << bucket_count << std::endl;
 
 	//	unordered_map::bucket_size
@@ -165,7 +240,7 @@ void unordered_map_test( )
 	//	unordered_map::max_load_factor
 	//	unordered_map::max_size
 	std::cout << "size = " << my_map.size( ) << std::endl;
-	std::cout << "max_size = " << my_map.max_size( ) << std::endl;
+	std::cout << "max_size = " << static_cast< int >( my_map.max_size( ) ) << std::endl;
 	std::cout << "bucket_count = " << my_map.bucket_count( ) << std::endl;
 	std::cout << "max_bucket_count = " << my_map.max_bucket_count( ) << std::endl;
 	std::cout << "load_factor = " << my_map.load_factor( ) << std::endl;
@@ -204,13 +279,14 @@ void lambda_test( )
 	}
 }
 
+// rvalue testing to the purpose
 void rvalue_test( )
 {
-	typedef std::vector<SimpleRV> SimpleRvs;
-
 	SimpleRV test1( "first" );	// constructor
 
 	SimpleRvs rvs;
+	rvs.reserve( 10 );	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	rvs.push_back( std::move(test1) );		// move constructor
 	rvs.push_back( SimpleRV( "second" ) );	// constructor, move constructor
 
@@ -230,6 +306,8 @@ void norv_test( )
 	NoRV test1( "first" );	// constructor
 
 	NoRvs rvs;
+	rvs.reserve( 10 );
+
 	rvs.push_back( std::move(test1) );		// copy constructor
 	rvs.push_back( NoRV( "second" ) );		// constructor, copy constructor
 
