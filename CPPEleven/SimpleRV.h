@@ -11,9 +11,12 @@ public:
 	SimpleRV( SimpleRV&& rvt );
 	SimpleRV& operator=( SimpleRV&& rvt );
 
+	bool operator<( const SimpleRV& rvt ) const;
+
 	~SimpleRV( );
 
-	std::vector<std::string> m_names;
+	std::vector<std::string>	m_names;
+	clock_t						m_clock;
 };
 
 using SRValues = std::vector<SimpleRV>;

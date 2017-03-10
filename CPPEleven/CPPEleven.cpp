@@ -32,6 +32,12 @@ void foo(int&& i)
 	std::cout << "foo(int&& i)" << std::endl;
 }
 
+struct MyTime
+{
+	__int64 m_time;
+	clock_t m_clock;
+};
+
 __int64 get_time( ) 
 {
 	//return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -39,6 +45,16 @@ __int64 get_time( )
 	time(&temp);
 
 	return (__int64)temp;
+}
+
+MyTime get_time_ex( )
+{
+	MyTime temp;
+
+	time( &temp.m_time );
+	temp.m_clock = clock( );
+
+	return temp;
 }
 
 void rvalue_sorting( );
@@ -55,44 +71,51 @@ void compare_perf( );
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	//int w = 3;
-	//int& x = w;
-	//int&& y = 5;
+	try
+	{
+		//int w = 3;
+		//int& x = w;
+		//int&& y = 5;
 
-	//decltype(y) z = 4;
+		//decltype(y) z = 4;
 
-	//std::cout << "start" << std::endl;
+		//std::cout << "start" << std::endl;
 
-	////test_2( );
-	////test_3( );	
-	////test_1( );
+		////test_2( );
+		////test_3( );	
+		////test_1( );
 
-	//int i = 4;
-	//foo(i);
-	//foo(5);
+		//int i = 4;
+		//foo(i);
+		//foo(5);
 
-	///** Rvalue test */
-	//__int64 start = get_time( );
-	//rvalue_test( );
-	//__int64 end = get_time( );
+		///** Rvalue test */
+		//__int64 start = get_time( );
+		//rvalue_test( );
+		//__int64 end = get_time( );
 
-	//std::cout << "rvalue_test(): " << end - start << std::endl;
+		//std::cout << "rvalue_test(): " << end - start << std::endl;
 
-	///** No rvalue test */
-	//start = get_time( );
-	//norv_test( );
-	//end = get_time( );
+		///** No rvalue test */
+		//start = get_time( );
+		//norv_test( );
+		//end = get_time( );
 
-	//std::cout << "norv_test(): " << end - start << std::endl;
+		//std::cout << "norv_test(): " << end - start << std::endl;
 
-	///** Universal references */
-	//uref_test( );
-	//uref_test2( );
-	//lambda_test( );
-	//unordered_map_test( );
-	//vector_test( );
-	list_test( );
-	compare_perf( );
+		///** Universal references */
+		//uref_test( );
+		//uref_test2( );
+		//lambda_test( );
+		//unordered_map_test( );
+		//vector_test( );
+		list_test( );
+		compare_perf( );
+	}
+	catch ( std::exception& exc )
+	{
+		std::cout << "Exception: " << exc.what( ) << std::endl;
+	}
 
 	return 0;
 }
@@ -111,7 +134,7 @@ void compare_perf( )
 {
 	std::cout << std::endl << "=================== Compare performance =========================" << std::endl;
 
-	const int cont_size = 100000;
+	const int cont_size = 10000;
 
 	//SimpleVec vector;
 	//SimpleList	list;
@@ -155,36 +178,36 @@ void compare_perf( )
 
 	//std::cout << "Deque fill: " << end - start << std::endl;
 
-	IntVec vector;
-	IntList list;
-	IntDeque deque;
+	SimpleVec vector;
+	SimpleList list;
+	SimpleDeque deque;
 
 	for ( int i = 0; i < cont_size; i++ ) {
 		int num = rand( ) % 100000;
 
-		vector.push_back( num );
-		list.push_back( num );
-		deque.push_back( num );
+		vector.push_back( SimpleRV( "item " + std::to_string( num ) ) );
+		list.push_back( SimpleRV( "item " + std::to_string( num ) ) );
+		deque.push_back( SimpleRV( "item " + std::to_string( num ) ) );
 	}
 
 	/** Sorting */
-	__int64 start = get_time( );
+	MyTime start = get_time_ex( );
 	std::sort( vector.begin( ), vector.end( ) );
-	__int64 end = get_time( );
+	MyTime end = get_time_ex( );
 
-	std::cout << "Vector sort: " << end - start << std::endl;
+	std::cout << "Vector sort. Clock: " << end.m_clock - start.m_clock << ", time: " << end.m_time - start.m_time << std::endl;
 
-	start = get_time( );
+	start = get_time_ex( );
 	list.sort( );
-	end = get_time( );
+	end = get_time_ex( );
 
-	std::cout << "List sort: " << end - start << std::endl;
+	std::cout << "List sort. Clock: " << end.m_clock - start.m_clock << ", time: " << end.m_time - start.m_time << std::endl;
 
-	start = get_time( );
+	start = get_time_ex( );
 	std::sort( deque.begin( ), deque.end( ) );
-	end = get_time( );
+	end = get_time_ex( );
 
-	std::cout << "Deque sort: " << end - start << std::endl;
+	std::cout << "Deque sort. Clock: " << end.m_clock - start.m_clock << ", time: " << end.m_time - start.m_time << std::endl;
 
 	IntVec indices;
 	for ( int j = 0; j < cont_size; ++j ) 
@@ -196,34 +219,34 @@ void compare_perf( )
 	}
 
 	/** Random access */
-	start = get_time( );
+	start = get_time_ex( );
 	for ( int i : indices )
 	{
-		int some = vector.at( i );
+		SimpleRV& some = vector.at( i );
 	}
-	end = get_time( );
+	end = get_time_ex( );
 
-	std::cout << "Vector random access " << static_cast<int>( indices.size( ) ) << " times: " << end - start << std::endl;
+	std::cout << "Vector random access " << static_cast<int>( indices.size( ) ) << " times. Time: " << end.m_time - start.m_time << ", clock: " << end.m_clock - start.m_clock << std::endl;
 
-	start = get_time( );
+	start = get_time_ex( );
 	for ( int i : indices )
 	{
 		auto it = list.begin( );
 		std::advance( it, i );
-		int i = *it;
+		SimpleRV& i = *it;
 	}
-	end = get_time( );
+	end = get_time_ex( );
 
-	std::cout << "List random access " << static_cast<int>(indices.size( )) << " times: " << end - start << std::endl;
+	std::cout << "List random access " << static_cast<int>(indices.size( )) << " times.  Time: " << end.m_time - start.m_time << ", clock: " << end.m_clock - start.m_clock << std::endl;
 
-	start = get_time( );
+	start = get_time_ex( );
 	for ( int i : indices )
 	{
-		int some = deque.at( i );
+		SimpleRV& some = deque.at( i );
 	}
-	end = get_time( );
+	end = get_time_ex( );
 
-	std::cout << "deque random access " << static_cast<int>(indices.size( )) << " times: " << end - start << std::endl;
+	std::cout << "deque random access " << static_cast<int>(indices.size( )) << " times.  Time: " << end.m_time - start.m_time << ", clock: " << end.m_clock - start.m_clock << std::endl;
 }
 
 void list_test( )

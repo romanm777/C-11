@@ -8,18 +8,21 @@ SimpleRV::SimpleRV( const std::string& name )
 		m_names.push_back(name);
 	}
 
+	m_clock = clock( );
 	//std::cout << "constructor" << std::endl;
 }
 
 SimpleRV::SimpleRV( const SimpleRV& rvt )
 {
 	m_names = rvt.m_names;
+	m_clock = rvt.m_clock;
 	//std::cout << "copy constructor" << std::endl;
 }
 
 SimpleRV& SimpleRV::operator=( const SimpleRV& rvt )
 {
 	m_names = rvt.m_names;
+	m_clock = rvt.m_clock;
 
 	//std::cout << "assign op" << std::endl;
 
@@ -29,6 +32,7 @@ SimpleRV& SimpleRV::operator=( const SimpleRV& rvt )
 SimpleRV::SimpleRV( SimpleRV&& rvt )
 {
 	m_names = std::move( rvt.m_names );
+	m_clock = rvt.m_clock;
 
 	//std::cout << "move constructor" << std::endl;
 }
@@ -36,10 +40,16 @@ SimpleRV::SimpleRV( SimpleRV&& rvt )
 SimpleRV& SimpleRV::operator=( SimpleRV&& rvt )
 {
 	m_names = std::move( rvt.m_names );
+	m_clock = rvt.m_clock;
 
 	//std::cout << "move assign op" << std::endl;
 
 	return *this;
+}
+
+bool SimpleRV::operator<( const SimpleRV& rvt ) const
+{
+	return m_clock < rvt.m_clock;
 }
 
 SimpleRV::~SimpleRV( )
