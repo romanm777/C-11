@@ -10,6 +10,7 @@
 #include <algorithm>
 //#include <chrono>
 #include <unordered_map>
+#include <iterator>
 
 
 const int Size = 10000000;
@@ -49,6 +50,8 @@ void lambda_test( );
 void unordered_map_test( );
 void vector_test( );
 void list_test( );
+void compare_perf( );
+
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -89,34 +92,167 @@ int _tmain(int argc, _TCHAR* argv[])
 	//unordered_map_test( );
 	//vector_test( );
 	list_test( );
+	compare_perf( );
 
 	return 0;
 }
 
+
+using SimpleVec = std::vector<SimpleRV>;
 using SimpleList = std::list<SimpleRV>;
+using SimpleDeque = std::deque<SimpleRV>;
+
+using IntVec = std::vector<int>;
+using IntList = std::list<int>;
+using IntDeque = std::deque<int>;
+
+
+void compare_perf( )
+{
+	std::cout << std::endl << "=================== Compare performance =========================" << std::endl;
+
+	const int cont_size = 100000;
+
+	//SimpleVec vector;
+	//SimpleList	list;
+	//SimpleDeque deque;
+	
+	///** Filling */
+	//__int64 start = get_time( );
+	//for ( int i = 0; i < cont_size; ++i )
+	//{
+	//	SimpleRV temp( "item " + std::to_string( i ) );
+
+	//	/** Vector */
+	//	vector.push_back( temp );
+	//}
+	//__int64 end = get_time( );
+
+	//std::cout << "Vector fill: " << end - start << std::endl;
+
+
+	//start = get_time( );
+	//for ( int i = 0; i < cont_size; ++i )
+	//{
+	//	SimpleRV temp( "item " + std::to_string( i ) );
+
+	//	/** List */
+	//	list.push_back( temp );
+	//}
+	//end = get_time( );
+
+	//std::cout << "List fill: " << end - start << std::endl;
+
+	//start = get_time( );
+	//for ( int i = 0; i < cont_size; ++i )
+	//{
+	//	SimpleRV temp( "item " + std::to_string( i ) );
+
+	//	/** Deque */
+	//	deque.push_back( temp );
+	//}
+	//end = get_time( );
+
+	//std::cout << "Deque fill: " << end - start << std::endl;
+
+	IntVec vector;
+	IntList list;
+	IntDeque deque;
+
+	for ( int i = 0; i < cont_size; i++ ) {
+		int num = rand( ) % 100000;
+
+		vector.push_back( num );
+		list.push_back( num );
+		deque.push_back( num );
+	}
+
+	/** Sorting */
+	__int64 start = get_time( );
+	std::sort( vector.begin( ), vector.end( ) );
+	__int64 end = get_time( );
+
+	std::cout << "Vector sort: " << end - start << std::endl;
+
+	start = get_time( );
+	list.sort( );
+	end = get_time( );
+
+	std::cout << "List sort: " << end - start << std::endl;
+
+	start = get_time( );
+	std::sort( deque.begin( ), deque.end( ) );
+	end = get_time( );
+
+	std::cout << "Deque sort: " << end - start << std::endl;
+
+	IntVec indices;
+	for ( int j = 0; j < cont_size; ++j ) 
+	{
+		if ( j % 3 == 0 )
+		{
+			indices.push_back( j );
+		}
+	}
+
+	/** Random access */
+	start = get_time( );
+	for ( int i : indices )
+	{
+		int some = vector.at( i );
+	}
+	end = get_time( );
+
+	std::cout << "Vector random access " << static_cast<int>( indices.size( ) ) << " times: " << end - start << std::endl;
+
+	start = get_time( );
+	for ( int i : indices )
+	{
+		auto it = list.begin( );
+		std::advance( it, i );
+		int i = *it;
+	}
+	end = get_time( );
+
+	std::cout << "List random access " << static_cast<int>(indices.size( )) << " times: " << end - start << std::endl;
+
+	start = get_time( );
+	for ( int i : indices )
+	{
+		int some = deque.at( i );
+	}
+	end = get_time( );
+
+	std::cout << "deque random access " << static_cast<int>(indices.size( )) << " times: " << end - start << std::endl;
+}
 
 void list_test( )
 {
-	std::cout << std::endl << "=================== Vector test =========================" << std::endl;
+	std::cout << std::endl << "=================== List test =========================" << std::endl;
 
 	const int list_size = 500;
 	SimpleList list;
 	
-	// resize( )
+	// resize( ) is not accessed, when there is no default constructor
 
 	std::cout << "List size: " << list.size( ) << std::endl;
-	list.resize( list_size );
+	//list.resize( list_size );
 	std::cout << "List size after resize( ): " << list.size( ) << std::endl;
-}
 
-typedef std::vector<SimpleRV> SimpleRvs;
+	for ( int i = 0; i < list_size; ++i ) 
+	{
+		list.push_back( SimpleRV( "list item " + std::to_string( i ) ) );
+	}
+
+	;
+}
 
 void vector_test( )
 {
 	std::cout << std::endl << "=================== Vector test =========================" << std::endl;
 	
 	const int val_count = 1000;
-	SimpleRvs values;
+	SimpleVec values;
 
 	// capcity( )
 	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
@@ -284,7 +420,7 @@ void rvalue_test( )
 {
 	SimpleRV test1( "first" );	// constructor
 
-	SimpleRvs rvs;
+	SimpleVec rvs;
 	rvs.reserve( 10 );	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	rvs.push_back( std::move(test1) );		// move constructor
