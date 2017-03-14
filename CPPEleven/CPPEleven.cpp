@@ -67,6 +67,10 @@ void unordered_map_test( );
 void vector_test( );
 void list_test( );
 void compare_perf( );
+void map_multimap_test( );
+void map_unord_map_compare( );
+void stack_test( );
+void type_deduct_test( );
 
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -109,8 +113,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		//lambda_test( );
 		//unordered_map_test( );
 		//vector_test( );
-		list_test( );
-		compare_perf( );
+		//list_test( );
+		//compare_perf( );
+		//map_multimap_test( );
+		map_unord_map_compare( );
+		//stack_test( );
+		//type_deduct_test( );
+
 	}
 	catch ( std::exception& exc )
 	{
@@ -121,6 +130,37 @@ int _tmain(int argc, _TCHAR* argv[])
 }
 
 
+template <typename> struct TD;
+void someFunc( int, double ) {}	// someFunc - function, its type is
+								// void( int, double )
+
+void type_deduct_test( )
+{
+	std::cout << std::endl << "=================== Type deduction =========================" << std::endl;
+
+	auto x = 27;
+	const auto cx = x;
+	const auto& rx = x;
+
+	/** Universal refernce */
+	auto&& uref1 = x;
+	auto&& uref2 = cx;
+	auto&& uref3 = 27;
+
+	std::cout << typeid(uref1).name( ) << std::endl;
+
+	/** Functions */
+	const char name[] =		// name type - const char[13]
+		"R. N. Briggs";
+	auto arr1 = name;		// arr1 type - const 
+	auto& arr2 = name;		// arr2 type - const char (&)[13]
+
+	auto func1 = someFunc;			// func1 type - void (*)(int, double)
+	auto& func2 = someFunc;			// func2 type - void (&)(int, double)
+
+//	TD<decltype(arr2)> _;			
+}
+
 using SimpleVec = std::vector<SimpleRV>;
 using SimpleList = std::list<SimpleRV>;
 using SimpleDeque = std::deque<SimpleRV>;
@@ -129,12 +169,11 @@ using IntVec = std::vector<int>;
 using IntList = std::list<int>;
 using IntDeque = std::deque<int>;
 
-
 void compare_perf( )
 {
 	std::cout << std::endl << "=================== Compare performance =========================" << std::endl;
 
-	const int cont_size = 10000;
+	const int cont_size = 100;
 
 	//SimpleVec vector;
 	//SimpleList	list;
@@ -249,6 +288,156 @@ void compare_perf( )
 	std::cout << "deque random access " << static_cast<int>(indices.size( )) << " times.  Time: " << end.m_time - start.m_time << ", clock: " << end.m_clock - start.m_clock << std::endl;
 }
 
+using MyStack = std::stack<int>;
+
+void stack_test( )
+{
+	std::cout << std::endl << "=================== Stack test =========================" << std::endl;
+
+	MyStack stack;
+
+	/** emplace( ) */
+	stack.emplace( 1 );
+
+	std::cout << "Item on top: " << stack.top( ) << std::endl;
+
+	/** push( ) */
+	stack.push( 2 );
+
+	std::cout << "Item on top: " << stack.top( ) << std::endl;
+
+	stack.emplace( 3 );
+	stack.emplace( 4 );
+	stack.emplace( 5 );
+
+	stack.push( 6 );
+	stack.push( 7 );
+}
+
+using SimpleMap = std::map< std::string, SimpleRV >;
+using SimpleMultimap = std::multimap< std::string, SimpleRV >;
+
+void map_multimap_test( )
+{
+	std::cout << std::endl << "=================== Map multimap test =========================" << std::endl;
+
+	SimpleMap first_map, second_map;
+	SimpleMultimap multimap;
+
+	/** filling the first*/
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::cout << "First map size before filling: " << first_map.size( ) << std::endl;
+	for ( int i = 0; i < Count; ++i )
+	{
+		first_map.emplace( std::make_pair( "first key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+	}
+	std::cout << "First map size after filling: " << first_map.size( ) << std::endl;
+
+
+	/** filling the second*/
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::cout << "Second map size before filling: " << second_map.size( ) << std::endl;
+	for ( int i = 0; i < Count; ++i )
+	{
+		second_map.emplace( std::make_pair( "second key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+	}
+	std::cout << "Second map size after filling: " << second_map.size( ) << std::endl;
+
+	/** Multimap filling */
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::cout << "Multimap size before filling: " << multimap.size( ) << std::endl;
+	for ( int i = 0; i < Count; ++i )
+	{
+		multimap.emplace( std::make_pair( "first key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+		multimap.emplace( std::make_pair( "first key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+	}
+	std::cout << "Multimap size after filling: " << multimap.size( ) << std::endl;
+
+
+	std::cout << "--- Map insert/delete/access methods ---" << std::endl;
+
+	/** count( ) */
+	std::cout << "Count( ). First map count of items with \"first key 7\": " << first_map.count( "first key 7" ) << std::endl;
+
+	/** emplace( ) */
+	first_map.emplace( std::make_pair( "first key 4.1", SimpleRV( "item 4.1" ) ) );
+	std::cout << "Emplace( ). First map count of items with \"first key 4.1\"" << first_map.count( "first key 4.1" ) << std::endl;
+	std::cout << "First map size: " << first_map.size( ) << std::endl;
+
+	/** insert( ) */
+	SimpleMap::iterator from = second_map.begin( );
+	SimpleMap::iterator to = second_map.begin( );
+	std::advance( from, 4 );
+	std::advance( to, 7 );
+
+	first_map.insert( from, to );
+	std::cout << "Insert( ). First map size: " << first_map.size( ) << std::endl;
+
+	/** erase( ) */
+	first_map.erase( first_map.begin( ) );
+	std::cout << "Erase( ). First map size: " << first_map.size( ) << std::endl;
+
+	/** operator[]( ) */
+	//SimpleRV& newVal = first_map["first key 4.1"]; // does not compile because of there is no default constructor available
+	
+	/** at( ) */
+	try
+	{
+		SimpleRV& newVal = first_map.at("danny");
+	}
+	catch ( std::out_of_range& exc )
+	{
+		std::cout << "There is no item with key \"danny\"! " << exc.what( ) << std::endl;
+	}
+
+	std::cout << "--- Multimap insert/delete/access methods ---" << std::endl;
+
+	/** emplace( ) */
+	std::cout << "Multimap before emplace: " << multimap.size( ) << std::endl;
+	multimap.emplace( std::make_pair( "superior key", SimpleRV( "mmap item" ) ) );
+	std::cout << "Multimap after emplace: " << multimap.size( ) << std::endl;
+
+	/** insert( ) */
+	from = second_map.begin( );
+	to = second_map.begin( );
+	std::advance( from, 4 );
+	std::advance( to, 7 );
+
+	multimap.insert( from, to );
+	std::cout << "Multimap after insert: " << multimap.size( ) << std::endl;
+
+	/** erase */
+	multimap.erase( "superior key" );
+	std::cout << "Multimap after erase: " << multimap.size( ) << std::endl;
+
+	/** equal range */
+	std::pair< SimpleMultimap::iterator, SimpleMultimap::iterator > res = multimap.equal_range( "first key 10" );
+	
+	std::string temp;
+	for ( SimpleMultimap::iterator it = res.first; it != res.second; ++it )
+	{
+		temp += (it->first + ", ");
+	}
+
+	std::cout << "Multimap equal range result: " << temp << std::endl;
+
+	/** find( ) */
+	MyTime start_time = get_time_ex( );
+	SimpleMultimap::iterator found = multimap.find( "first key 500" );
+	MyTime end_time = get_time_ex( );
+
+	std::string found_str = found != multimap.end( ) ? found->first : "not found";
+	std::cout << "find( ). Found pair is: " << found_str << ", found time: " << end_time.m_time - start_time.m_time << std::endl;
+
+	/** lower_bound( ) */
+	start_time = get_time_ex( );
+	found = multimap.lower_bound( "first key 500" );
+	end_time = get_time_ex( );
+
+	found_str = found != multimap.end( ) ? found->first : "not found";
+	std::cout << "lower_bound( ). Found pair is: " << found_str << ", found time: " << end_time.m_time - start_time.m_time << std::endl;
+}
+
 void list_test( )
 {
 	std::cout << std::endl << "=================== List test =========================" << std::endl;
@@ -312,7 +501,7 @@ void vector_test( )
 
 }
 
-using StrSRvMap = std::unordered_map<std::string, SimpleRV>;
+using SimpleUnorderMap = std::unordered_map<std::string, SimpleRV>;
 using StrSRvPair = std::pair<std::string, SimpleRV>;
 
 void unordered_map_test( )
@@ -320,7 +509,7 @@ void unordered_map_test( )
 	std::cout << std::endl << "=================== Unordered_map test =========================" << std::endl;
 
 	const int count = 508;//100;
-	StrSRvMap my_map;
+	SimpleUnorderMap my_map;
 
 	// bucket count
 	int bucket_count = my_map.bucket_count( );
@@ -387,10 +576,10 @@ void unordered_map_test( )
 	std::cout << "item with a key \"" << key << "\" is \"" << *( my_map.at( key ).m_names.begin( ) ) << "\"" << std::endl;
 
 	//	unordered_map::equal_range
-	std::pair< StrSRvMap::iterator, StrSRvMap::iterator > range = my_map.equal_range( "key 20" );
+	std::pair< SimpleUnorderMap::iterator, SimpleUnorderMap::iterator > range = my_map.equal_range( "key 20" );
 
 	//	unordered_map::hash_function
-	StrSRvMap::hasher fn = my_map.hash_function( );
+	SimpleUnorderMap::hasher fn = my_map.hash_function( );
 	std::cout << "this " << fn( "this" ) << std::endl;
 	std::cout << "bla-bla " << fn( "bla-bla" ) << std::endl;
 
@@ -411,6 +600,43 @@ void unordered_map_test( )
 	//	unordered_map::reserve
 	//	unordered_map::size
 	//	unordered_map::swap
+}
+
+void map_unord_map_compare( )
+{
+	std::cout << std::endl << "=================== Map vs unordered_map test =========================" << std::endl;
+
+	SimpleMap map;
+	SimpleUnorderMap u_map;
+
+	/** filling the first*/
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	MyTime start = get_time_ex( );
+	for ( int i = 0; i < Count; ++i )
+	{
+		map.emplace( std::make_pair( "first key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+	}
+	MyTime end = get_time_ex( );
+	std::cout << "Map fill time: " << end.m_clock - start.m_clock << std::endl;
+
+	end = get_time_ex( );
+	for ( int i = 0; i < Count; ++i )
+	{
+		u_map.emplace( std::make_pair( "first key " + std::to_string( i ), SimpleRV( "item " + std::to_string( i ) ) ) );
+	}
+	end = get_time_ex( );
+	std::cout << "Unorder map fill time: " << end.m_clock - start.m_clock << std::endl;
+
+	start = get_time_ex( );
+	SimpleRV& map_val = map.at( "first key 800" );
+	end = get_time_ex( );
+	std::cout << "Map access time: " << end.m_clock - start.m_clock << std::endl;
+
+	start = get_time_ex( );
+	SimpleRV& unord_map_val = u_map.at( "first key 800" );
+	end = get_time_ex( );
+	std::cout << "Unord_map access time: " << end.m_clock - start.m_clock << std::endl;
 }
 
 void lambda_test( )

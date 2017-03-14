@@ -14,6 +14,8 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <map>
+#include <stack>
 #include <time.h>
 
 const int Count = 1000;
