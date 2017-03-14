@@ -1,8 +1,8 @@
 ipch
 *.opendb
 *.db
+*.vspx
 *.filters
-*.vcxproj
 *.user
 *.VC
 *.suo

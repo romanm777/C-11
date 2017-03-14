@@ -3,7 +3,7 @@
 
 SimpleRV::SimpleRV( const std::string& name )
 {
-	for(int i = 0; i < Count / 10; ++i)
+	for(int i = 0; i < Count / 100; ++i)
 	{
 		m_names.push_back(name);
 	}

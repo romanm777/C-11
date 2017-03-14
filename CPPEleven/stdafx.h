@@ -15,10 +15,14 @@
 #include <list>
 #include <deque>
 #include <map>
+#include <set>
+#include <unordered_map>
 #include <stack>
 #include <time.h>
 
-const int Count = 1000;
+#include <algorithm>
+
+const int Count = 10000;
 
 
 
