@@ -72,26 +72,26 @@ void type_deduct_test( )
 	std::cout << std::endl << "=================== Auto type deduction =========================" << std::endl;
 
 	change_str( get_str( ) );
-	auto s1 = get_str( );
+	auto s1 = get_str( );		// const std::string&	->	std::string
 	s1 = "best string";
 
-	auto& s2 = get_str( );
+	auto& s2 = get_str( );		//
 	//s2 = "other string";
 
 	auto&& s3 = get_str( );
 	//s3 = "other string";
 
-	auto x = 27;
-	const auto cx = x;
-	const auto& rx = x;
+	auto x = 27;				// int
+	const auto cx = x;			// const int
+	const auto& rx = x;			// const int&
 
 	/** Universal refernce */
-	auto&& uref1 = x;
-	auto&& uref2 = cx;
-	auto&& uref22 = rx;
-	auto&& uref3 = 27;
+	auto&& uref1 = x;			// int			->	int&
+	auto&& uref2 = cx;			// const int	->	const int&
+	auto&& uref22 = rx;			// const int&	->	const int&
+	auto&& uref3 = 27;			// 27			->	int&&
 
-	//	TD<decltype( uref22 )> _;
+		TD<decltype( s2 )> _;
 
 	std::cout << typeid( uref1 ).name( ) << std::endl;
 
@@ -101,8 +101,14 @@ void type_deduct_test( )
 	auto arr1 = name;		// arr1 type - const 
 	auto& arr2 = name;		// arr2 type - const char (&)[13]
 
-	const auto func5 = someFunc;			// func1 type - void (*)(int, double)
-	const auto& func6 = someFunc;			// func2 type - void (&)(int, double)
+	auto func5 = someFunc;			// func1 type - void (*)(int, double)
+	auto& func6 = someFunc;			// func2 type - void (&)(int, double)
 
-	//	TD<decltype(func6)> _;			
+	//	TD<decltype(func6)> _;	
+	
+	std::cout << std::endl << "=================== Decltype deduction =========================" << std::endl;
+
+	decltype( get_str( ) ) val = get_str( );	// const std::string&
+
+	// TD<decltype(val)> _;	
 }
