@@ -130,8 +130,6 @@ void access_items( StrMap& map, const IntVec& indices )
 
 void map_unord_map_compare( )
 {
-	Sleep( 2000 );
-
 	std::cout << std::endl << "=================== Map vs unordered_map test =========================" << std::endl;
 
 	/** filling the first*/
@@ -238,6 +236,7 @@ StrUnorderMap fill_unord_map_cap( std::vector<int>& indices )
 
 /****************************************************************/
 
+size_t hashe_val = 0;
 
 struct KeyHasher
 {
@@ -247,6 +246,9 @@ struct KeyHasher
 		/*return ((hash<string>( )(k.first)
 			^ (hash<string>( )(k.second) << 1)) >> 1)
 			^ (hash<int>( )(k.third) << 1);*/
+
+		//hash = hashe_val;
+		//hashe_val += 1000000;
 
 		return hash; // +(rand( ) << 2) + rand( );
 	}
@@ -264,7 +266,7 @@ template <typename T>
 void show_buckets_count( std::unordered_map<std::string, std::string, T>& umap );
 
 template <typename T>
-void access_items( std::unordered_map<std::string, std::string, T>& umap );
+void access_items( std::unordered_map<std::string, std::string, T>& umap, const IntVec& indices );
 
 void create_umap_with_hasher( HashUnordMap& umap, const IntVec& indices )
 {
@@ -292,7 +294,7 @@ IntVec CreateIndices( const int size )
 	for( int i = 0; i < size / 2; ++i )
 	{
 		indices.push_back( i );
-		indices.push_back( Count - 1 - i );
+		indices.push_back( size - 1 - i );
 	}
 
 	return indices;
@@ -300,9 +302,13 @@ IntVec CreateIndices( const int size )
 
 const int Size = 1000;
 
-void hasher_test( )
+void umap_hasher_test( )
 {
-	Sleep( 2000 );
+	int some;
+	std::cout << "Press any key";
+	std::cin >> some;
+
+	std::cout << std::endl << "=================== Unordered map hasher test =========================" << std::endl;
 
 	IntVec indices = CreateIndices( Size );
 
@@ -312,11 +318,15 @@ void hasher_test( )
 	
 	show_buckets_hasher( u_map_hasher );
 
+	access_items( u_map_hasher, indices );
+
 	// map without my hasher
 	UnordMap u_map;// = { { "John", "first" }, { "Mary", "another" } };
 	create_umap_simple( u_map, indices );
 
 	show_buckets_simple( u_map );
+
+	access_items( u_map, indices );
 }
 
 template <typename T>
@@ -369,7 +379,57 @@ void show_buckets_count( std::unordered_map<std::string, std::string, T>& umap )
 }
 
 template <typename T>
-void access_items( std::unordered_map<std::string, std::string, T>& umap )
+void access_items( std::unordered_map<std::string, std::string, T>& umap, const IntVec& indices )
 {
-	;
+	const size_t ind_size = indices.size( );
+	for ( int i = 0; i < ind_size; i += 3 )
+	{
+		std::string& str = umap.at( "Leon" + std::to_string( indices[i] ) );
+	}
+}
+
+using IntStrMap = std::map<__int8, std::string>;
+using IntStrUnordMap = std::unordered_map<__int8, std::string>;
+
+void type_range_overflow( )
+{
+	std::cout << std::endl << "=================== Unordered map type range overflow test =========================" << std::endl;
+
+	int some;
+	std::cout << "Press any key";
+	std::cin >> some;
+
+	IntStrMap map;
+	IntStrUnordMap u_map;
+
+	std::string temp( "Item " );
+
+	int first = 130, second = 500;
+	u_map.emplace( IntStrUnordMap::value_type( first, temp + std::to_string( first ) ) );
+	u_map.emplace( IntStrUnordMap::value_type( second, temp + std::to_string( second ) ) );
+
+	for ( int i = 0; i < 300; ++i )
+	{
+		if ( i == 255 ) {
+			temp = "Second item ";
+			std::cout << "Max value of __int8 is reached!" << std::endl;
+		}
+
+		u_map.emplace( IntStrUnordMap::value_type( i, temp + std::to_string( i ) ) );
+	}
+}
+
+void bucket_placement_in_memory( )
+{
+	HashUnordMap u_map_hash;
+
+	for ( int i = 0; i < 14; ++i ) {
+		std::string key( "Item " + std::to_string( i ) );
+		u_map_hash.emplace( HashUnordMap::value_type( key, "Value " + std::to_string( i ) ) );
+
+		size_t bucket_num = u_map_hash.bucket_count( );
+		std::cout << key << " has bucket #" << u_map_hash.bucket( key ) << ", its hash: " << u_map_hash.hash_function( )( key ) << std::endl;
+	}
+
+	std::cout << "Bucket count: " << u_map_hash.bucket_count( ) << std::endl;
 }

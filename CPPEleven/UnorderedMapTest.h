@@ -20,4 +20,8 @@ StrUnorderMap fill_unord_map( std::vector<int>& indices );
 
 StrUnorderMap fill_unord_map_cap( std::vector<int>& indices );
 
-void hasher_test( );
+void umap_hasher_test( );
+
+void type_range_overflow( );
+
+void bucket_placement_in_memory( );

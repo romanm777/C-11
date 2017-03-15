@@ -23,7 +23,7 @@ void test_1( );
 void test_2( );
 void test_3( );
 
-
+void loop_sleep( ) { for ( int i = 0; i < 10000000; ++i ) { std::string str( "sleep" ); } }
 
 
 
@@ -31,8 +31,11 @@ void test_3( );
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	//loop_sleep( );
+
 	try
 	{
+
 		//int w = 3;
 		//int& x = w;
 		//int&& y = 5;
@@ -74,12 +77,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		//compare_perf( );
 		
 		//map_multimap_test( );
-		map_unord_map_compare( );
+		//map_unord_map_compare( );
 		
 		//stack_test( );
 		//type_deduct_test( );
 
-		hasher_test( );
+		//umap_hasher_test( );
+		type_range_overflow( );
+		bucket_placement_in_memory( );
 	}
 	catch ( std::exception& exc )
 	{
