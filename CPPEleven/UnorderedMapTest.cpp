@@ -423,7 +423,7 @@ void bucket_placement_in_memory( )
 {
 	HashUnordMap u_map_hash;
 
-	for ( int i = 0; i < 14; ++i ) {
+	for ( int i = 0; i < 4; ++i ) {
 		std::string key( "Item " + std::to_string( i ) );
 		u_map_hash.emplace( HashUnordMap::value_type( key, "Value " + std::to_string( i ) ) );
 

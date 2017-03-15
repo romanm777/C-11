@@ -12,6 +12,7 @@
 
 #include "GetTime.h"
 #include "UnorderedMapTest.h"
+#include "TypeDeductionTest.h"
 
 
 const int Size = 10000000;
@@ -80,11 +81,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		//map_unord_map_compare( );
 		
 		//stack_test( );
-		//type_deduct_test( );
+		type_deduct_test( );
 
 		//umap_hasher_test( );
-		type_range_overflow( );
-		bucket_placement_in_memory( );
+		
+		//type_range_overflow( );
+		//bucket_placement_in_memory( );
 	}
 	catch ( std::exception& exc )
 	{
