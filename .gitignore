@@ -6,6 +6,7 @@ ipch
 *.user
 *.VC
 *.suo
+*.vsp
 .vs
 x64
 Debug

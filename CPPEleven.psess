@@ -36,7 +36,7 @@
   </PostinstrumentEvent>
   <Binaries>
     <ProjBinary>
-      <Path>Debug\CPPEleven.exe</Path>
+      <Path>x64\Debug\CPPEleven.exe</Path>
       <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
       <Instrument>true</Instrument>
       <Sample>true</Sample>
@@ -48,7 +48,7 @@
       <LaunchProject>true</LaunchProject>
       <OverrideProjectSettings>false</OverrideProjectSettings>
       <LaunchMethod>Executable</LaunchMethod>
-      <ExecutablePath>Debug\CPPEleven.exe</ExecutablePath>
+      <ExecutablePath>x64\Debug\CPPEleven.exe</ExecutablePath>
       <StartupDirectory>CPPEleven\</StartupDirectory>
       <Arguments>
       </Arguments>
@@ -69,13 +69,28 @@
   </Binaries>
   <Reports>
     <Report>
-      <Path>CPPEleven170314.vspx</Path>
+      <Path>CPPEleven170315.vsp</Path>
     </Report>
     <Report>
-      <Path>CPPEleven170314(1).vspx</Path>
+      <Path>CPPEleven170315(1).vsp</Path>
     </Report>
     <Report>
-      <Path>CPPEleven170314(2).vspx</Path>
+      <Path>CPPEleven170315(2).vsp</Path>
+    </Report>
+    <Report>
+      <Path>CPPEleven170315(3).vsp</Path>
+    </Report>
+    <Report>
+      <Path>CPPEleven170315(4).vsp</Path>
+    </Report>
+    <Report>
+      <Path>CPPEleven170315(5).vsp</Path>
+    </Report>
+    <Report>
+      <Path>CPPEleven170315(6).vsp</Path>
+    </Report>
+    <Report>
+      <Path>CPPEleven170315(7).vsp</Path>
     </Report>
   </Reports>
   <Launches>

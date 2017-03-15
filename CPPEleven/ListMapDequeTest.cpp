@@ -3,6 +3,7 @@
 
 #include "GetTime.h"
 
+const int Count = 10000;
 
 void compare_perf( )
 {

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "SimpleRV.h"
 
+const int Count = 10000;
+
 SimpleRV::SimpleRV( const std::string& name )
 {
 	for(int i = 0; i < Count / 100; ++i)

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RValueTest.h"
 
+const int Count = 10000;
 
 void init_strings(Strings& strs)
 {

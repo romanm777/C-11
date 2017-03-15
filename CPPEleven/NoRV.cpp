@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "NoRV.h"
 
+const int Count = 10000;
+
 NoRV::NoRV( const std::string& name )
 {
 	for(int i = 0; i < Count; ++i)

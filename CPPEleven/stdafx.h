@@ -22,8 +22,6 @@
 
 #include <algorithm>
 
-const int Count = 10000;
-
 
 
 // TODO: reference additional headers your program requires here

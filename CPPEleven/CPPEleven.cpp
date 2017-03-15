@@ -79,7 +79,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		//stack_test( );
 		//type_deduct_test( );
 
-		//hasher_test( );
+		hasher_test( );
 	}
 	catch ( std::exception& exc )
 	{
