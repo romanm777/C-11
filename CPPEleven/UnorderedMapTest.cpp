@@ -113,7 +113,7 @@ void unordered_hasher_test( )
 void access_items( StrUnorderMap& umap, const IntVec& indices )
 {
 	const size_t size = indices.size( );
-	for( int i = 0; i < size; i += 3 )
+	for( size_t i = 0; i < size; i += 3 )
 	{
 		std::string& str = umap.at( "first key " + std::to_string( indices[i] ) );
 	}
@@ -122,7 +122,7 @@ void access_items( StrUnorderMap& umap, const IntVec& indices )
 void access_items( StrMap& map, const IntVec& indices )
 {
 	const size_t size = indices.size( );
-	for( int i = 0; i < size; i += 3 )
+	for( size_t i = 0; i < size; i += 3 )
 	{
 		std::string& str = map.at( "first key " + std::to_string( indices[i] ) );
 	}
@@ -197,7 +197,7 @@ StrMap fill_map( std::vector<int>& indices )
 	StrMap map;
 
 	const size_t size = indices.size( );
-	for ( int i = 0; i < size; ++i )
+	for ( size_t i = 0; i < size; ++i )
 	{
 		map.insert( std::make_pair( "first key " + std::to_string( indices[i] ), "item " + std::to_string( indices[i] ) ) );
 	}
@@ -210,7 +210,7 @@ StrUnorderMap fill_unord_map( std::vector<int>& indices )
 	StrUnorderMap u_map;
 
 	const size_t size = indices.size( );
-	for ( int i = 0; i < size; ++i )
+	for ( size_t i = 0; i < size; ++i )
 	{
 		u_map.insert( std::make_pair( "first key " + std::to_string( indices[i] ), "item " + std::to_string( indices[i] ) ) );
 	}
@@ -226,7 +226,7 @@ StrUnorderMap fill_unord_map_cap( std::vector<int>& indices )
 	size_t new_bucket = u_map_cap.bucket_count( );
 
 	const size_t size = indices.size( );
-	for ( int i = 0; i < size; ++i )
+	for ( size_t i = 0; i < size; ++i )
 	{
 		u_map_cap.insert( std::make_pair( "first key " + std::to_string( indices[i] ), "item " + std::to_string( indices[i] ) ) );
 	}
@@ -336,7 +336,7 @@ void create_umap( std::unordered_map<std::string, std::string, T>& umap, const I
 
 	const size_t ind_size = indices.size( );
 
-	for ( int i = 0; i < ind_size; ++i )
+	for ( size_t i = 0; i < ind_size; ++i )
 	{
 		umap.emplace( std::unordered_map<std::string, std::string, T>::value_type( "Leon" + std::to_string( indices[i] ), "worker" + std::to_string( indices[i] ) ) );
 	}
@@ -350,7 +350,7 @@ void show_buckets_count( std::unordered_map<std::string, std::string, T>& umap )
 	const size_t size = umap.size( );
 	SizeTVec buckets;
 
-	for ( int i = 0; i < size; ++i )
+	for ( size_t i = 0; i < size; ++i )
 	{
 		buckets.push_back( umap.bucket( "Leon" + std::to_string( i ) ) );
 	}
@@ -382,7 +382,7 @@ template <typename T>
 void access_items( std::unordered_map<std::string, std::string, T>& umap, const IntVec& indices )
 {
 	const size_t ind_size = indices.size( );
-	for ( int i = 0; i < ind_size; i += 3 )
+	for ( size_t i = 0; i < ind_size; i += 3 )
 	{
 		std::string& str = umap.at( "Leon" + std::to_string( indices[i] ) );
 	}
