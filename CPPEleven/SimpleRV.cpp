@@ -56,4 +56,6 @@ bool SimpleRV::operator<( const SimpleRV& rvt ) const
 
 SimpleRV::~SimpleRV( )
 {
+	m_names;
+	m_clock;
 }

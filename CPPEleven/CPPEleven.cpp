@@ -13,6 +13,7 @@
 #include "GetTime.h"
 #include "UnorderedMapTest.h"
 #include "TypeDeductionTest.h"
+#include "OtherTest.h"
 
 
 const int Size = 10000000;
@@ -68,8 +69,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		//std::cout << "norv_test(): " << end - start << std::endl;
 
 		///** Universal references */
-		//uref_test( );
-		//uref_test2( );
+		uref_test( );
+		uref_test2( );
 		//lambda_test( );
 
 		//unordered_map_test( );

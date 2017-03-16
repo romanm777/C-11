@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TypeDeductionTest.h"
+#include "SimpleRV.h"
 
 template <typename> struct TD;
 void someFunc( int, double ) {}	// someFunc - function, its type is
@@ -60,6 +61,8 @@ auto GetItem( Container&& c, Index i ) -> decltype( c[i] );
 
 std::vector<int> get_ints( );
 
+void question_test( );
+
 void type_deduct_test( )
 {
 	std::cout << std::endl << "=================== Template type deduction =========================" << std::endl;
@@ -86,11 +89,25 @@ void type_deduct_test( )
 	auto&& s3 = get_str( );		// const std::string&	-> const std::string&
 	//s3 = "other string";
 
-	int a1 = 40;
-	int& a2 = a1;
-	auto a3 = a2;
+	int a1 = 40;				// 
+	int& a2 = a1;				// int&
+	const int& a2_1 = a2;
+
+	auto a3 = a2;				// int
+	auto a4 = a2;				// int
+	auto a5 = &a4;				// int*
+	auto a6 = &a2_1;			// const int*
+
+	const int theAnswer = 42;
+	int* theAnswer1 = nullptr;
+	auto x1 = theAnswer;		// const int	->	int
+	auto y1 = theAnswer1;		// const int*	->	const int*
+	//	TD<decltype( y1 )> _;
 
 	auto x = 27;				// int
+	auto& x2 = x;
+	x2 = 14;
+
 	const auto cx = x;			// const int
 	const auto& rx = x;			// const int&
 
@@ -112,6 +129,8 @@ void type_deduct_test( )
 
 	auto func5 = someFunc;			// func1 type - void (*)(int, double)
 	auto& func6 = someFunc;			// func2 type - void (&)(int, double)
+	auto&& func7 = someFunc;		// func3 type - void (&)(int, double)
+
 
 	//	TD<decltype(func6)> _;	
 	
@@ -130,9 +149,14 @@ void type_deduct_test( )
 	o1 = 100;
 	o2 = 101;
 
+	std::cout << "o1 " << o1 << ", o2 " << o2 << std::endl;
+
 	// TD<decltype( o1 )> _;
 	// TD<decltype( o2 )> _;
-	o1 == o2;
+
+	std::cout << std::endl << "================ Difference between template, auto, decltype ================" << std::endl;
+
+	question_test( );
 }
 
 std::vector<int> get_ints( )
@@ -145,4 +169,38 @@ template <typename Container, typename Index>
 auto GetItem( Container&& c, Index i ) -> decltype( c[i] )
 {
 	return c[i];
+}
+
+//template <typename Container, typename Index>
+//auto GetItem( Container&& c, Index i ) -> decltype( std::forward< Container >( c )[i] )
+//{
+//	return std::forward< Container >( c )[i];
+//}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+SimpleRV f( )
+{
+	return SimpleRV( "Mine" );
+}
+
+template <typename T>
+void some( T t )
+{
+	//T a = std::move( t );
+	T a = std::forward<T>( t );
+
+	std::cout << "Value of a: " << a.m_names.front( ) << std::endl;
+}
+
+void question_test( )
+{
+	auto a1 = f( );
+
+	decltype( f( ) ) a2 = f( );
+
+	some( f( ) );
+
+	auto a3 = std::move( f( ) );
 }

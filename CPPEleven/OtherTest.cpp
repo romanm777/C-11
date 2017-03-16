@@ -74,7 +74,7 @@ void norv_test( )
 template <typename T>
 T get_value( T&& val )
 {
-	if ( true ) {
+	if ( false ) {
 		T res = std::forward<T>( val );
 		return res;
 	}
@@ -90,6 +90,7 @@ void uref_test( )
 
 	int num = 8;
 	int test2 = get_value<int>( std::forward<int>( num ) );
+	int test2_1 = get_value<int>( std::move<int>( int( 10 ) ) );
 
 	SimpleRV test3( "three" );
 	SimpleRV res3 = get_value( test3 );
