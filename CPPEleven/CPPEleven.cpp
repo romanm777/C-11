@@ -15,6 +15,9 @@
 #include "TypeDeductionTest.h"
 #include "OtherTest.h"
 
+#include "AdaptorsTest.h"
+#include "AlgorithmsTest.h"
+#include "UserInputTest.h"
 
 const int Size = 10000000;
 
@@ -88,6 +91,11 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		//type_range_overflow( );
 		//bucket_placement_in_memory( );
+
+		priority_queue_test( );
+		algoritms_test( );
+		//user_input_test( );
+		//user_to_file_test( );
 	}
 	catch ( std::exception& exc )
 	{

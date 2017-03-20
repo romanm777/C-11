@@ -18,6 +18,9 @@
 #include <set>
 #include <unordered_map>
 #include <stack>
+#include <queue>
+#include <array>
+
 #include <time.h>
 #include <Windows.h>
 

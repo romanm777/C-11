@@ -138,6 +138,8 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdaptorsTest.h" />
+    <ClInclude Include="AlgorithmsTest.h" />
     <ClInclude Include="GetTime.h" />
     <ClInclude Include="ListMapDequeTest.h" />
     <ClInclude Include="NoRV.h" />
@@ -148,8 +150,11 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TypeDeductionTest.h" />
     <ClInclude Include="UnorderedMapTest.h" />
+    <ClInclude Include="UserInputTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdaptorsTest.cpp" />
+    <ClCompile Include="AlgorithmsTest.cpp" />
     <ClCompile Include="CPPEleven.cpp" />
     <ClCompile Include="GetTime.cpp" />
     <ClCompile Include="ListMapDequeTest.cpp" />
@@ -165,6 +170,7 @@
     </ClCompile>
     <ClCompile Include="TypeDeductionTest.cpp" />
     <ClCompile Include="UnorderedMapTest.cpp" />
+    <ClCompile Include="UserInputTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

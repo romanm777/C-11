@@ -1,5 +1,7 @@
 #pragma once
 
+extern int global_id;
+
 class SimpleRV
 {
 public:
@@ -15,8 +17,11 @@ public:
 
 	~SimpleRV( );
 
+	static void init_id( const int orig ) { global_id = orig; }
+
 	std::vector<std::string>	m_names;
 	clock_t						m_clock;
+	int							m_id;
 };
 
 using SRValues = std::vector<SimpleRV>;
