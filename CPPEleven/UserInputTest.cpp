@@ -90,6 +90,23 @@ void user_input_test( )
 		std::ostream_iterator<Point>( std::cout, "\n" ) );
 }
 
+std::istream& operator >> ( std::istream& s, char& character )
+{
+	char c = '\0';
+
+	s >> c;
+	if( c == 'Q' )
+	{
+		s.putback( c );
+		s.clear( std::ios_base::badbit );
+	}
+	else
+	{
+		character = c;
+	}
+
+	return s;
+}
 
 void user_to_file_test( )
 {

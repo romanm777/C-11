@@ -340,13 +340,20 @@ void algoritms_test( )
 		int myints[] = { 10,20,30,5,15 };
 		std::vector<int> v( myints, myints + 5 );
 
+		bool is_heap = std::is_heap( v.begin( ), v.end( ) );
 		std::make_heap( v.begin( ), v.end( ) );
+		is_heap = std::is_heap( v.begin( ), v.end( ) );
+
 		std::cout << "initial max heap   : " << v.front( ) << '\n';
 
-		std::pop_heap( v.begin( ), v.end( ) ); v.pop_back( );
+		std::pop_heap( v.begin( ), v.end( ) ); 
+		std::vector<int>::iterator it = std::is_heap_until( v.begin( ), v.end( ) );
+
+		v.pop_back( );
 		std::cout << "max heap after pop : " << v.front( ) << '\n';
 
-		v.push_back( 99 ); std::push_heap( v.begin( ), v.end( ) );
+		v.push_back( 99 ); 
+		std::push_heap( v.begin( ), v.end( ) );
 		std::cout << "max heap after push: " << v.front( ) << '\n';
 
 		std::sort_heap( v.begin( ), v.end( ) );
@@ -356,6 +363,21 @@ void algoritms_test( )
 			std::cout << ' ' << v[i];
 
 		std::cout << '\n';
+	}
+
+	// std::next_permutation
+	{
+		int myints[] = { 1,2,3 };
+
+		std::sort( myints, myints + 3 );
+
+		std::cout << "The 3! possible permutations with 3 elements:\n";
+		do
+		{
+			std::cout << myints[0] << ' ' << myints[1] << ' ' << myints[2] << '\n';
+		} while( std::next_permutation( myints, myints + 3 ) );
+
+		std::cout << "After loop: " << myints[0] << ' ' << myints[1] << ' ' << myints[2] << '\n';
 	}
 
 	
