@@ -90,29 +90,66 @@ void user_input_test( )
 		std::ostream_iterator<Point>( std::cout, "\n" ) );
 }
 
-std::istream& operator >> ( std::istream& s, char& character )
-{
-	char c = '\0';
-
-	s >> c;
-	if( c == 'Q' )
-	{
-		s.putback( c );
-		s.clear( std::ios_base::badbit );
-	}
-	else
-	{
-		character = c;
-	}
-
-	return s;
-}
+//std::istream& operator >> ( std::istream& s, char& character )
+//{
+//	char c = '\0';
+//
+//	s >> c;
+//	if( c == 'Q' )
+//	{
+//		s.putback( c );
+//		s.clear( std::ios_base::badbit );
+//	}
+//	else
+//	{
+//		character = c;
+//	}
+//
+//	return s;
+//}
 
 void user_to_file_test( )
 {
 	std::string path( "C:/Users/mrychko/_Work/C++/CPPEleven/file.txt" );
-	std::ofstream FILE( path, std::ios::out | std::ofstream::binary );
-	std::copy( std::istream_iterator<char>( std::cin ), std::istream_iterator<char>( ), std::ostreambuf_iterator<char>( FILE ) );
+
+	if( false )
+	{
+		const int DIM = 6;
+		int array[DIM] = { 1,2,3,4,5,6 };
+		std::vector<int> my_vector( array, array + DIM );
+
+		std::ofstream out_file;
+		out_file.open( path, std::ios::out | std::ofstream::binary );
+
+		if ( out_file.is_open( ) )
+		{
+			std::copy( my_vector.begin( ), my_vector.end( ), std::ostreambuf_iterator<char>( out_file ) );
+
+			out_file.close( );
+		}
+	}
+
+	if ( true ) 
+	{
+		std::cout << "===================== User input to a file ==========================" << std::endl;
+		std::cout << "Enter something: " << std::endl;
+
+		std::ofstream out_file2( path, std::ios::out );
+
+		std::copy_if( std::istream_iterator<char>( std::cin ), std::istream_iterator<char>( ), std::ostreambuf_iterator<char>( out_file2 ),
+			[&out_file2]( char c )
+		{
+			if ( c == 'Q' ) {
+				out_file2.close( );
+				std::cin.clear( std::ios_base::eofbit );
+			}
+
+			return true;
+		} );
+	}
+
+	//std::ofstream FILE2( path, std::ios::out | std::ofstream::binary );
+	//std::copy( std::istream_iterator<char>( std::cin ), std::istream_iterator<char>( ), std::ostreambuf_iterator<char>( FILE2 ) );
 
 	//std::copy( iter.begin( ), iter.end( ), std::back_inserter( newVector ) );
 

@@ -95,7 +95,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		priority_queue_test( );
 		algoritms_test( );
 		//user_input_test( );
-		//user_to_file_test( );
+		user_to_file_test( );
 	}
 	catch ( std::exception& exc )
 	{
