@@ -18,6 +18,7 @@
 #include "AdaptorsTest.h"
 #include "AlgorithmsTest.h"
 #include "UserInputTest.h"
+#include "ThreadTest.h"
 
 const int Size = 10000000;
 
@@ -72,8 +73,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		//std::cout << "norv_test(): " << end - start << std::endl;
 
 		///** Universal references */
-		uref_test( );
-		uref_test2( );
+		//*uref_test( );
+		//*uref_test2( );
 		//lambda_test( );
 
 		//unordered_map_test( );
@@ -85,17 +86,18 @@ int _tmain(int argc, _TCHAR* argv[])
 		//map_unord_map_compare( );
 		
 		//stack_test( );
-		type_deduct_test( );
+		// *type_deduct_test( );
 
 		//umap_hasher_test( );
 		
 		//type_range_overflow( );
 		//bucket_placement_in_memory( );
 
-		priority_queue_test( );
-		algoritms_test( );
+		//*priority_queue_test( );
+		//*algoritms_test( );
 		//user_input_test( );
-		user_to_file_test( );
+		//user_to_file_test( );
+		mutex_test( );
 	}
 	catch ( std::exception& exc )
 	{
