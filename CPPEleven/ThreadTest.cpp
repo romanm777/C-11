@@ -10,11 +10,11 @@ void mutex_test( )
 	//thread_test( );
 	//timed_mutex_test( );
 	//lock_guard_test( );
-	//promice_test( );
+	promice_test( );
 	//packaged_task_test( );
 
 	//async_async_test( );
-	future_test( );
+	//*future_test( );
 }
 
 const int Count = 100;
@@ -318,6 +318,7 @@ void future_test( )
 		std::cout << '.';
 
 	bool x = fut.get( );
+	bool is_valid = fut.valid( );
 
 	std::cout << "\n700020007 " << ( x ? "is" : "is not" ) << " prime.\n";
 }

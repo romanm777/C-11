@@ -101,7 +101,7 @@ void type_deduct_test( )
 	const int theAnswer = 42;
 	int* theAnswer1 = nullptr;
 	auto x1 = theAnswer;		// const int	->	int
-	auto y1 = theAnswer1;		// const int*	->	const int*
+	auto y1 = theAnswer1;		// const int*	->	int*
 	//	TD<decltype( y1 )> _;
 
 	auto x = 27;				// int
