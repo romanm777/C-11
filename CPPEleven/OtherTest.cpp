@@ -84,8 +84,39 @@ T get_value( T&& val )
 	}
 };
 
+void proc1( const SimpleRV& lval )
+{ 
+	std::cout << "Process with lval\n";
+}
+
+void proc1( SimpleRV&& rval )
+{
+	std::cout << "Process with rval\n";
+}
+
+template < typename T >
+void test_rval( T&& param1, T&& param2 )
+{
+	proc1( std::forward<T>( param1 ) );
+	proc1( std::move( param2 ) );
+}
+
 void uref_test( )
 {
+	std::cout << "================================ Universal reference test =================================" << std::endl;
+
+	SimpleRV w1( "w1" ), w2( "w2" );
+	test_rval( w1, w2 );
+	test_rval( std::move( w1 ), std::move( w2 ) );
+
+	proc1( w1 );
+	proc1( std::move( w2 ) );
+
+	SimpleRV w3 = std::move( w1 );
+	SimpleRV w4 = std::forward<SimpleRV>( w2 );
+
+	//////////////////////////////////////
+
 	int test1 = get_value<int>( 4 );
 
 	int num = 8;

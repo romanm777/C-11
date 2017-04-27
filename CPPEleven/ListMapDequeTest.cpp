@@ -295,6 +295,7 @@ void list_test( )
 	;
 }
 
+
 void vector_test( )
 {
 	std::cout << std::endl << "=================== Vector test =========================" << std::endl;
@@ -335,4 +336,18 @@ void vector_test( )
 	// capcity( )
 	std::cout << "capacity( ) " << values.capacity( ) << std::endl;
 
+	/// ints1
+	std::vector<int> ints1 = { 4, 5, 3, -1, 8, 3 };
+	std::vector<int>::iterator it = ints1.begin( );
+
+	while( it != ints1.end( ) ) 
+	{
+		it = ints1.erase( it );
+	}
+
+	//// ints2
+	std::vector<int> ints2 = { 4, 5, 3, -1, 8, 3 };
+
+	std::vector<int>::iterator new_end = std::remove( ints2.begin( ), ints2.end( ), 3 );
+	ints2.erase( new_end, ints2.end( ) );
 }

@@ -10,10 +10,10 @@ void mutex_test( )
 	//thread_test( );
 	//timed_mutex_test( );
 	//lock_guard_test( );
-	promice_test( );
+	//promice_test( );
 	//packaged_task_test( );
 
-	//async_async_test( );
+	async_async_test( );
 	//*future_test( );
 }
 

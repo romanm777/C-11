@@ -146,13 +146,13 @@ void type_deduct_test( )
 	auto o1 = GetItem( get_ints( ), 2 );
 	auto&& o2 = GetItem( ints, 2 );
 	
+	// TD<decltype( o1 )> _;
+	// TD<decltype( o2 )> _;
+
 	o1 = 100;
 	o2 = 101;
 
 	std::cout << "o1 " << o1 << ", o2 " << o2 << std::endl;
-
-	// TD<decltype( o1 )> _;
-	// TD<decltype( o2 )> _;
 
 	std::cout << std::endl << "================ Difference between template, auto, decltype ================" << std::endl;
 

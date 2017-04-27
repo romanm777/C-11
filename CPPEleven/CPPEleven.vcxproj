@@ -139,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdaptorsTest.h" />
+    <ClInclude Include="AdditionalTopics.h" />
     <ClInclude Include="AlgorithmsTest.h" />
     <ClInclude Include="GetTime.h" />
     <ClInclude Include="ListMapDequeTest.h" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdaptorsTest.cpp" />
+    <ClCompile Include="AdditionalTopics.cpp" />
     <ClCompile Include="AlgorithmsTest.cpp" />
     <ClCompile Include="CPPEleven.cpp" />
     <ClCompile Include="GetTime.cpp" />
