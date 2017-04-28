@@ -31,6 +31,12 @@ void additional_topics( )
 
 	// iterators test
 	iterators_test( );
+
+	// type info test
+	type_info_test( );
+
+	// slicing test
+	slicing_test( );
 }
 
 ////////////////////////////////////
@@ -541,14 +547,20 @@ void iterators_test( )
 	std::back_insert_iterator< std::deque< int > > bit( ints1 );
 	std::copy( ints1.begin( ), ints1.end( ), bit );
 
+	// list back_inserter
+	std::list< int > ilist { 4, 7, 3, 0 };
+	std::back_insert_iterator< std::list< int > > lbit( ilist );
+	std::copy( ints1.begin( ), ints1.end( ), lbit );
+
 	// front_insert_iterator
 	Ints ints2 { 11, 12, 13, 14 };
 	std::front_insert_iterator< std::deque< int > > fit( ints1 );
 	std::copy( ints2.begin( ), ints2.end( ), fit );
 
 	// back_inserter
-	Ints ints3;
+	Ints ints3, ints3_1;
 	std::copy( ints2.begin( ), ints2.end( ), std::back_inserter( ints3 ) );
+	std::replace_copy( ints2.begin( ), ints2.end( ), std::back_inserter( ints3_1 ), 12, 120 );
 
 	// front_inserter
 	std::copy( ints2.begin( ) + 1, ints2.begin( ) + 3, std::front_inserter( ints3 ) );
@@ -561,9 +573,168 @@ void iterators_test( )
 	std::insert_iterator< Ints > ii( ints3, ints3.end( ) );
 	std::copy( ints4.begin( ), ints4.begin( ) + 1, ii );
 
-	// reverse_iterator
+	// reverse_iterator ( random-access iterator )
 	using ints_it_type = Ints::iterator;
 	std::reverse_iterator< ints_it_type > rev_it = ints4.rbegin( );
 	int val6 = rev_it[1];
 
+	// istream_iterator ( input iterator )
+	std::cout << "Enter double:\n";
+	std::istream_iterator< double > eos;
+/*	std::istream_iterator< double > iit( std::cin );
+
+	double val_d = 0.0;
+	if ( iit != eos )
+	{
+		val_d = *iit;
+		iit++;
+	}
+*/
+	// ostream_iterator ( output iterator )
+	std::ostream_iterator<int> out_it( std::cout, ", " );
+	std::copy( ints4.begin( ), ints4.end( ), out_it );
+
+	// istreambuf_iterator ( input iterator )
+	std::istreambuf_iterator< char > isb_eos;
+	std::istreambuf_iterator< char > isb_it( std::cin.rdbuf( ) );
+	std::string my_str;
+
+	std::cout << "Enter your name: ";
+
+	/*while ( isb_it != isb_eos && *isb_it != '\n' )
+	{
+		my_str += *isb_it;
+		isb_it++;
+	}*/
+
+	std::cout << "The name is " << my_str << ".\n";
+
+	// ostreambuf_iterator ( output iterator )
+	std::string my_str1( "Some text here...\n" );
+	std::ostreambuf_iterator< char > out_it1( std::cout );
+
+	std::copy( my_str1.begin( ), my_str1.end( ), out_it1 );
+
+	// move iterator ( adaptor )
+	Ints ints5( 7 );
+	using It = Ints::iterator;
+	std::copy( std::move_iterator< It >( ints4.begin( ) ), std::move_iterator< It >( ints4.end( ) ), ints5.begin( ) );
+
+	std::cout << "Ints5 after moving elements: ";
+	std::copy( ints5.begin( ), ints5.end( ), std::ostream_iterator< int >( std::cout, ", " ) );
+
+	// make move iterator ( adaptor )
+	Ints ints6( 10 );
+	std::copy( std::make_move_iterator( ints4.begin( ) ), std::make_move_iterator( ints4.end( ) ), ints6.begin( ) );
+	
+	std::cout << "Ints6 after make_move_iterator on its elements: "; 
+	std::copy( ints6.begin( ), ints6.end( ), std::ostream_iterator< int >( std::cout, ", " ) );
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////			type info test			/////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+class A1
+{
+public:
+	virtual ~A1( ) {}
+
+	virtual void super( ) const { std::cout << "A1\n"; }
+};
+
+class B1 : public A1
+{
+public:
+	virtual ~B1( ) {}
+
+	virtual void super( ) const { std::cout << "B1\n"; }
+};
+
+class C1
+{
+public:
+	virtual ~C1( ) {}
+
+	virtual void super( ) const { std::cout << "C1\n"; }
+};
+
+void type_info_test( )
+{
+	std::cout << "====================================== type info test ===============================================\n";
+
+	bool a_before_b = typeid( A1 ).before( typeid( HeaderClass ) );
+	bool hash_equal = typeid( A1 ).hash_code( ) == typeid( B1 ).hash_code( );
+
+	std::cout << "A before B: " << ( a_before_b ? "true" : "false" ) << std::endl;
+	std::cout << "Name of class is \"" << typeid( HeaderClass ).name( ) << "\"\n";
+	
+	try
+	{
+		B1 b;
+		A1* pa = &b;
+		B1* pb = dynamic_cast< B1* >( pa );
+
+		std::cout << "Nullptr pointer name is : " << typeid( *pb ).name( ) << ".\n";
+	}
+	// !!! exception is thrown only for polymorphic classes !!!
+	catch ( std::exception& exc )
+	{
+		std::cout << exc.what( ) << std::endl;
+	}
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////			slicing test			/////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+class A2
+{
+public:
+	A2( const std::string& str ) : m_str( str )	{}
+
+	void show_str( ) const { std::cout << m_str << std::endl; }
+
+private:
+	std::string	m_str;
+};
+
+class B2 : public A2
+{
+public:
+	B2( const std::string& der, const std::string& base ) : A2( base ), m_str2( der ) {}
+
+	void show_str( ) const 
+	{ 
+		std::cout << m_str2; 
+		A2::show_str( ); 
+	}
+
+private:
+	std::string m_str2;
+};
+
+void some( A2 a1 )
+{
+	a1.show_str( );
+}
+
+void slicing_test( )
+{
+	std::string name_der( "object B2"), name_base( "obj A2" );
+	B2 one( name_der, name_base );
+	A2* pa = &one;
+
+	// slicing #1
+	some( *pa );
+	std::cout << "-----------------------------\n";
+
+	// slicing #2
+	B2 another( "another B2", "another A2" );
+	A2& a2 = one;
+	a2 = another;
+
+	a2.show_str( );
 }

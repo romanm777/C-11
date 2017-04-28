@@ -27,3 +27,15 @@ void default_test( );
 
 // iterators test
 void iterators_test( );
+
+// type_info test
+void type_info_test( );
+
+// type_info test
+class HeaderClass
+{
+
+};
+
+// slicing test
+void slicing_test( );
