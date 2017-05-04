@@ -37,6 +37,9 @@ void additional_topics( )
 
 	// slicing test
 	slicing_test( );
+
+	// using test
+	using_test( );
 }
 
 ////////////////////////////////////
@@ -184,6 +187,7 @@ int init( )
 class TestExcept 
 {
 public:
+	// constructor with function-try-block
 	TestExcept( )
 		try : m_digit( 4.0 )
 	{
@@ -218,7 +222,7 @@ private:
 
 void try_catch_ctor_dtor_test( )
 {
-	std::cout << "============================================= try cathc and constructor test ======================================================\n";
+	std::cout << "============================================= try catch and constructor test ======================================================\n";
 
 	try
 	{
@@ -481,10 +485,12 @@ public:
 
 	DefClass& operator=( DefClass&& dc )// = default;
 	{
+		m_str = std::move( dc.m_str );
+
 		return *this;
 	}
 
-	~DefClass( ) = default;
+	virtual ~DefClass( ) = default;
 //	{
 //		;
 //	}
@@ -581,15 +587,15 @@ void iterators_test( )
 	// istream_iterator ( input iterator )
 	std::cout << "Enter double:\n";
 	std::istream_iterator< double > eos;
-/*	std::istream_iterator< double > iit( std::cin );
+//	std::istream_iterator< double > iit( std::cin );
 
-	double val_d = 0.0;
-	if ( iit != eos )
-	{
-		val_d = *iit;
-		iit++;
-	}
-*/
+//	double val_d = 0.0;
+//	if ( iit != eos )
+//	{
+//		val_d = *iit;	// dereferencing of istream_iterator
+//		iit++;			// wait for the next input
+//	}
+
 	// ostream_iterator ( output iterator )
 	std::ostream_iterator<int> out_it( std::cout, ", " );
 	std::copy( ints4.begin( ), ints4.end( ), out_it );
@@ -622,6 +628,15 @@ void iterators_test( )
 
 	std::cout << "Ints5 after moving elements: ";
 	std::copy( ints5.begin( ), ints5.end( ), std::ostream_iterator< int >( std::cout, ", " ) );
+
+	// -------------
+	using Defs = std::vector< DefClass >;
+	using DIt = Defs::iterator;
+
+	Defs defs { DefClass( "first" ), DefClass( "second" ), DefClass( "third" ) };
+	Defs d_out( 3 );
+
+	std::copy( std::move_iterator< DIt >( defs.begin( ) ), std::move_iterator< DIt >( defs.end( ) ), d_out.begin( ) );
 
 	// make move iterator ( adaptor )
 	Ints ints6( 10 );
@@ -737,4 +752,48 @@ void slicing_test( )
 	a2 = another;
 
 	a2.show_str( );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////			using test			/////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+void f( ) 
+{
+	std::cout << "Global f( )\n";
+}
+
+namespace An 
+{
+	void g( ) 
+	{
+		std::cout << "A::g( )\n";
+	}
+}
+
+namespace Xn
+{
+	using ::f;
+	using An::g;
+
+	namespace Yn
+	{
+		namespace Zn
+		{
+			void g( )
+			{
+				std::cout << "X::Y::Z::g( )\n";
+			}
+		}
+	}
+}
+
+namespace XYZ = Xn::Yn::Zn;
+
+void using_test( )
+{
+	f( );
+	Xn::g( );
+
+	XYZ::g( );
 }

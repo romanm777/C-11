@@ -39,3 +39,6 @@ class HeaderClass
 
 // slicing test
 void slicing_test( );
+
+// using test
+void using_test( );

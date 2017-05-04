@@ -196,7 +196,7 @@ void get_input( std::promise<Car>& input )
 
 	input.set_value_at_thread_exit( car );
 
-	for ( int i = 0; i < Count * 100; ++i )
+	for ( int i = 0; i < Count * 1000; ++i )
 	{
 	}
 }
